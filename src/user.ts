@@ -1,5 +1,7 @@
-export class User{
-  username: string;
-  email: string;
-  password: string;
+export class User {
+    name: string;
+    email: string;
+    password: string;
+    created_at?: string;
+    updated_at?: string;
 }
