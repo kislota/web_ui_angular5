@@ -1,7 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {AuthenticationServiceService} from '../authentication-service.service';
-import {ActivatedRoute} from "@angular/router";
-import {Location} from '@angular/common';
+import {Router} from '@angular/router';
 
 @Component({
     selector: 'app-logout',
@@ -10,9 +8,7 @@ import {Location} from '@angular/common';
 })
 export class LogoutComponent implements OnInit {
 
-    constructor(private route: ActivatedRoute,
-                private authservise: AuthenticationServiceService,
-                private location: Location) {
+    constructor(private router: Router) {
     }
 
     private token: string;
@@ -22,11 +18,7 @@ export class LogoutComponent implements OnInit {
     }
 
     logout(): void {
-        this.authservise.logout(this.authservise.getToken());
-        var d = new Date();
-        d.setTime(d.getTime() + (0 * 60 * 1000));
-        var expires = "expires=" + d.toUTCString();
-        document.cookie = "token=;" + expires + ";path=/";
-        this.location.go('login');
+        window.localStorage.clear();
+        this.router.navigate(['']);
     }
 }

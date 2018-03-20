@@ -1,3 +1,8 @@
-<p>
-  User detail!
-</p>
+<div *ngIf="user" class="row">
+  <div class="col-4"><span>User id: </span></div>
+  <div class="col-4"><span>User name: </span></div>
+  <div class="col-4"><span>Email: </span></div>
+  <div class="col-4">{{user.id}}</div>
+  <div class="col-4">{{user.name}}</div>
+  <div class="col-4">{{user.email}}</div>
+</div>

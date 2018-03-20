@@ -9,18 +9,19 @@ import {AppRoutingModule} from '../app-routing.module';
 
 import {LoginComponent} from './login/login.component';
 import {LogoutComponent} from './logout/logout.component';
-import {UserComponent} from './user/user.component';
+import {UsersComponent} from './users/users.component';
 import {UserDetailComponent} from './user.detail/user.detail.component';
 import {AuthenticationServiceService} from './authentication-service.service';
-
+import {RegisterComponent} from "./register/register.component";
 
 @NgModule({
     declarations: [
         AppComponent,
         LoginComponent,
         LogoutComponent,
-        UserComponent,
-        UserDetailComponent
+        UsersComponent,
+        UserDetailComponent,
+        RegisterComponent
     ],
     imports: [
         BrowserModule,
@@ -29,7 +30,7 @@ import {AuthenticationServiceService} from './authentication-service.service';
         AppRoutingModule
     ],
     providers: [
-        AuthenticationServiceService
+        AuthenticationServiceService,
     ],
     bootstrap: [AppComponent]
 })

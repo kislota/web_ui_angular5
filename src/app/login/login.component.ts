@@ -1,37 +1,29 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {AuthenticationServiceService} from '../authentication-service.service';
 import {User} from '../../user';
-import {Location} from "@angular/common";
+import {Router} from '@angular/router';
+import {parseJson} from "@angular-devkit/core";
 
 
 @Component({
     selector: 'app-login',
     templateUrl: './login.component.html',
-    styleUrls: ['./login.component.css']
+    styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit {
 
-    @Input() user: User;
-    // user: = {
-    //     name: 'admin',
-    //     email: 'admin@gmail.com',
-    //     password: 'secret'
-    // };
-
-    private token: string;
     public email: string;
     public password: string;
+    public error: object;
 
-    constructor(
-                private authservise: AuthenticationServiceService,
-                private location: Location) {
+    constructor(private authservise: AuthenticationServiceService,
+                private router: Router) {
     }
 
     ngOnInit() {
-        this.token = this.authservise.getToken();
-        if(this.token){
-            console.log('Token found');
-            this.location.go('user');
+        let token: string = window.localStorage.getItem('token');
+        if (token) {
+            this.router.navigate(['user']);
         }
     }
 
@@ -40,22 +32,17 @@ export class LoginComponent implements OnInit {
             .subscribe(
                 (result: any) => {
                     let token = 'Bearer ' + result.token;
-                    this.authservise.authlogin(token).subscribe(
-                        data => {
-                            document.cookie = "token =" + token;
-                            this.toUser();
-                        },
-                        error2 => {
-                            console.log(error2.error);
-                        }
-                    );
-                    },
+                    window.localStorage.setItem('token', token);
+                    this.authservise.getUser(token)
+                        .subscribe(data => {
+                            let user = JSON.stringify(data.user);
+                            window.localStorage.setItem('user', user);
+                            this.router.navigate(['user']);
+                        });
+                },
                 error1 => {
-                    console.log(error1.error);
+                    this.error = error1.error
+                    console.log(this.error);
                 });
-    }
-
-    toUser() {
-        this.location.go('/user');
     }
 }
