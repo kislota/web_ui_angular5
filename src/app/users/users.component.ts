@@ -10,9 +10,10 @@ import {AuthenticationServiceService} from "../authentication-service.service";
 })
 export class UsersComponent implements OnInit {
 
-    users: User [];
+    public users;
+    public loading = false;
 
-    constructor(private authservise: AuthenticationServiceService) {
+    constructor(private router: Router, private authservise: AuthenticationServiceService) {
     }
 
     ngOnInit() {
@@ -24,11 +25,19 @@ export class UsersComponent implements OnInit {
     }
 
     getUsers(): void {
-        this.authservise.getUsers()
-            .subscribe(data => {
-                this.users = data.users;
-                let users = JSON.stringify(this.users);
-                window.localStorage.setItem('users', users);
-            });
+        this.loading = true;
+        let token = window.localStorage.getItem('token');
+        if (token) {
+            this.authservise.getUsers(token)
+                .subscribe(data => {
+                    this.loading = false;
+                    this.users = data;
+                    let users = JSON.stringify(data);
+                    window.localStorage.setItem('users', users);
+                });
+        } else {
+            this.loading = false;
+            this.router.navigate(['']);
+        }
     }
 }

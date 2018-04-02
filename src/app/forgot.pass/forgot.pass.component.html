@@ -1,0 +1,10 @@
+<form (ngSubmit)="updateUser()" name="form" class="form-signin">
+    <h1 class="h3 mb-3 font-weight-normal">Please enter new password</h1>
+    <div class="error" *ngIf="error">{{error}}</div>
+    <label for="inputPasswordFirst" class="sr-only">Password</label>
+    <input id="inputPasswordFirst" [(ngModel)]="passwordfirst" class="form-control" name="passwordfirst" placeholder="Password" required="" type="password">
+    <label for="inputPasswordSecond" class="sr-only">Re-Password</label>
+    <input id="inputPasswordSecond" [(ngModel)]="passwordsecond" class="form-control" name="passwordsecond" placeholder="Re-Password" required="" type="password">
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Update password</button>
+</form>
+<ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '14px' }"></ngx-loading>

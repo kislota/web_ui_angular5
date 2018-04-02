@@ -15,6 +15,7 @@ export class LoginComponent implements OnInit {
     public email: string;
     public password: string;
     public error: object;
+    public loading = false;
 
     constructor(private authservise: AuthenticationServiceService,
                 private router: Router) {
@@ -28,21 +29,24 @@ export class LoginComponent implements OnInit {
     }
 
     login() {
+        this.loading = true;
         this.authservise.login(this.email, this.password)
             .subscribe(
                 (result: any) => {
-                    let token = 'Bearer ' + result.token;
+                    this.loading = false;
+                    let token = result.token_type + ' ' + result.access_token;
                     window.localStorage.setItem('token', token);
                     this.authservise.getUser(token)
                         .subscribe(data => {
-                            let user = JSON.stringify(data.user);
-                            window.localStorage.setItem('user', user);
-                            this.router.navigate(['user']);
-                        });
+                                let user = JSON.stringify(data);
+                                window.localStorage.setItem('user', user);
+                                this.router.navigate(['user']);
+                            },
+                            error2 => this.error = error2.error);
                 },
                 error1 => {
+                    this.loading = false;
                     this.error = error1.error
-                    console.log(this.error);
                 });
     }
 }

@@ -30,7 +30,5 @@ export class UserDetailComponent implements OnInit {
 
     getUser(): void {
         this.user = JSON.parse(window.localStorage.getItem('user'));
-        console.log(this.user);
-
     }
 }

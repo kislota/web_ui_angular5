@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
+import {AuthenticationServiceService} from "../authentication-service.service";
 
 @Component({
     selector: 'app-logout',
@@ -8,17 +9,30 @@ import {Router} from '@angular/router';
 })
 export class LogoutComponent implements OnInit {
 
-    constructor(private router: Router) {
-    }
+    public loading = false;
 
-    private token: string;
+    constructor(private router: Router, private authservise: AuthenticationServiceService) {
+    }
 
     ngOnInit() {
         this.logout();
     }
 
     logout(): void {
-        window.localStorage.clear();
-        this.router.navigate(['']);
+        this.loading = true;
+        let token = window.localStorage.getItem('token');
+        if (token) {
+            this.authservise.logout(token)
+                .subscribe(data => {
+                    this.loading = false;
+                        if (data == 'logout')
+                            window.localStorage.clear();
+                        this.router.navigate(['']);
+                    }
+                );
+        } else {
+            this.loading = false;
+            this.router.navigate(['']);
+        }
     }
 }
